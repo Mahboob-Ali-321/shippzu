@@ -1,24 +1,38 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
+    "name": "Shippzu",
+    "slug": "shippzu",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "frontend",
+    "scheme": "shippzu",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.emergent.shippzustaging.lupmti"
+      "bundleIdentifier": "com.emergent.shippzustaging.lupmti",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Deliver food to your current location",
+        "NSCameraUsageDescription": "Update your profile photo",
+        "NSPhotoLibraryUsageDescription": "Pick a photo for your profile",
+        "NSMicrophoneUsageDescription": "Search restaurants with voice"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#000000"
+        "backgroundColor": "#FF5A1F"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.emergent.shippzustaging.lupmti"
+      "package": "com.emergent.shippzustaging.lupmti",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "RECORD_AUDIO",
+        "INTERNET"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -33,7 +47,7 @@
           "image": "./assets/images/splash-image.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#000000"
+          "backgroundColor": "#FF5A1F"
         }
       ]
     ],

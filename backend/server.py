@@ -1,59 +1,44 @@
-from fastapi import FastAPI, APIRouter
-from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
+"""Shippzu Super-App backend.
+
+Modular architecture — each module (food_delivery, grocery, pharmacy, etc.)
+mounts its own routers under a common /api prefix.
+"""
 import os
 import logging
+from contextlib import asynccontextmanager
 from pathlib import Path
-from pydantic import BaseModel, Field
-from typing import List
-import uuid
-from datetime import datetime
 
+from fastapi import FastAPI, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
 ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
+load_dotenv(ROOT_DIR / ".env")
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
-
-# Create the main app without a prefix
-app = FastAPI()
-
-# Create a router with the /api prefix
-api_router = APIRouter(prefix="/api")
+from modules.shared.database import get_db, close_db
+from modules.shared.auth.router import router as auth_router
+from modules.food_delivery.routers.restaurants import router as fd_restaurants
+from modules.food_delivery.routers.orders import router as fd_orders
+from modules.food_delivery.routers.addresses import router as fd_addresses
+from modules.food_delivery.routers.coupons import router as fd_coupons
+from modules.food_delivery.routers.notifications import router as fd_notifications
+from modules.food_delivery.seed import seed_if_empty
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+logger = logging.getLogger("shippzu")
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
 
-# Add your routes to the router instead of directly to app
-@api_router.get("/")
-async def root():
-    return {"message": "Hello World"}
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    db = get_db()
+    await seed_if_empty(db)
+    logger.info("Shippzu backend ready — food delivery module loaded")
+    yield
+    close_db()
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.dict()
-    status_obj = StatusCheck(**status_dict)
-    _ = await db.status_checks.insert_one(status_obj.dict())
-    return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    status_checks = await db.status_checks.find().to_list(1000)
-    return [StatusCheck(**status_check) for status_check in status_checks]
-
-# Include the router in the main app
-app.include_router(api_router)
+app = FastAPI(title="Shippzu API", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -63,13 +48,42 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
+# All routes under /api
+api_router = APIRouter(prefix="/api")
 
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    client.close()
+
+@api_router.get("/")
+async def root():
+    return {
+        "app": "Shippzu",
+        "tagline": "Everything You Need",
+        "version": "1.0.0",
+        "modules": ["food_delivery"],
+        "planned_modules": [
+            "grocery", "pharmacy", "parcel", "marketplace", "flowers",
+            "water", "meat", "laundry", "pet_supplies", "pickup_drop",
+        ],
+    }
+
+
+@api_router.get("/health")
+async def health():
+    try:
+        db = get_db()
+        await db.command("ping")
+        return {"status": "ok", "database": "connected"}
+    except Exception as e:
+        return {"status": "error", "detail": str(e)}
+
+
+# Mount shared auth
+api_router.include_router(auth_router)
+
+# Mount food delivery module routers
+api_router.include_router(fd_restaurants)
+api_router.include_router(fd_orders)
+api_router.include_router(fd_addresses)
+api_router.include_router(fd_coupons)
+api_router.include_router(fd_notifications)
+
+app.include_router(api_router)
