@@ -39,22 +39,28 @@ export default function Login() {
     }
   };
 
-  const googleLogin = () => {
-    // Native Google Sign-In activates on APK/AAB build with @react-native-google-signin
-    toast.show("Google Sign-In activates on the device build", "info");
-  };
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top", "bottom"]}>
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }} keyboardShouldPersistTaps="handled">
-          <View style={styles.logoRow}>
-            <Logo variant="stacked" size={80} showTagline />
+        <ScrollView
+          contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Brand block — cleanly separated from the heading */}
+          <View style={styles.brand} testID="login-brand">
+            <Logo variant="stacked" size={44} showTagline />
           </View>
-          <Text style={[typography.h1, { color: colors.text, textAlign: "center", marginTop: spacing.md }]}>Welcome back</Text>
-          <Text style={[typography.bodyLarge, { color: colors.textSecondary, textAlign: "center", marginBottom: spacing.lg }]}>
-            Sign in to continue ordering
-          </Text>
+
+          {/* Heading block */}
+          <View style={styles.headingBlock}>
+            <Text style={[typography.h1, { color: colors.text, textAlign: "center" }]} testID="login-heading">
+              Welcome back
+            </Text>
+            <Text style={[typography.bodyLarge, { color: colors.textSecondary, textAlign: "center", marginTop: 4 }]}>
+              Sign in to continue ordering
+            </Text>
+          </View>
 
           <Input
             label="Email"
@@ -81,7 +87,12 @@ export default function Login() {
             }
             testID="login-password-input"
           />
-          <Pressable onPress={() => router.push("/(auth)/forgot-password")} style={{ alignSelf: "flex-end" }} testID="forgot-password-link">
+          <Pressable
+            onPress={() => router.push("/(auth)/forgot-password")}
+            style={{ alignSelf: "flex-end" }}
+            testID="forgot-password-link"
+            hitSlop={8}
+          >
             <Text style={[typography.body, { color: colors.primary, fontWeight: "700" }]}>Forgot password?</Text>
           </Pressable>
 
@@ -93,18 +104,21 @@ export default function Login() {
             <View style={[styles.divider, { backgroundColor: colors.border }]} />
           </View>
 
-          <Pressable
-            onPress={googleLogin}
-            style={[styles.socialBtn, { borderColor: colors.border, backgroundColor: colors.surface }]}
+          {/* Google — visibly disabled with a Coming soon pill */}
+          <View
+            style={[styles.googleBtn, { borderColor: colors.border, backgroundColor: colors.surface, opacity: 0.6 }]}
             testID="google-signin-btn"
           >
             <Ionicons name="logo-google" size={20} color="#DB4437" />
             <Text style={[typography.subtitle, { color: colors.text }]}>Continue with Google</Text>
-          </Pressable>
+            <View style={[styles.soonPill, { backgroundColor: colors.warning + "22", borderColor: colors.warning }]}>
+              <Text style={[styles.soonText, { color: colors.warning }]}>COMING SOON</Text>
+            </View>
+          </View>
 
-          <View style={{ flexDirection: "row", justifyContent: "center", marginTop: spacing.lg, gap: 4 }}>
+          <View style={styles.footerRow}>
             <Text style={{ ...typography.body, color: colors.textSecondary }}>New to Shippzu?</Text>
-            <Pressable onPress={() => router.push("/(auth)/signup")} testID="go-to-signup-btn">
+            <Pressable onPress={() => router.push("/(auth)/signup")} testID="go-to-signup-btn" hitSlop={8}>
               <Text style={{ ...typography.body, color: colors.primary, fontWeight: "700" }}>Create account</Text>
             </Pressable>
           </View>
@@ -115,11 +129,27 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  logoRow: { alignItems: "center", marginTop: spacing.lg },
+  brand: { alignItems: "center", marginTop: spacing.lg, marginBottom: spacing.md },
+  headingBlock: { marginBottom: spacing.lg },
   dividerRow: { flexDirection: "row", alignItems: "center", gap: spacing.md, marginVertical: spacing.md },
   divider: { flex: 1, height: 1 },
-  socialBtn: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center", gap: spacing.sm,
-    paddingVertical: 14, borderRadius: radii.lg, borderWidth: 1,
+  googleBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.sm,
+    paddingVertical: 14,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.lg,
+    borderWidth: 1,
   },
+  soonPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: radii.full,
+    borderWidth: 1,
+    marginLeft: 4,
+  },
+  soonText: { fontSize: 10, fontWeight: "800", letterSpacing: 0.5 },
+  footerRow: { flexDirection: "row", justifyContent: "center", marginTop: spacing.lg, gap: 4 },
 });

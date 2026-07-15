@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { storage } from "@/src/utils/storage";
 import { api } from "@/src/api/client";
 import { useAuth } from "./AuthContext";
@@ -30,31 +30,36 @@ export function AddressProvider({ children }: { children: React.ReactNode }) {
   const [selected, setSelectedState] = useState<Address | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
+  const hydratedRef = useRef(false);
 
+  // 1. HYDRATE from storage exactly once on mount, before anything else can touch selection.
   useEffect(() => {
     (async () => {
       const raw = await storage.getItem<string>(SELECTED_KEY, "");
       if (raw) {
         try { setSelectedState(JSON.parse(raw) as Address); } catch { /* ignore */ }
       }
-      setHydrated(true);
+      hydratedRef.current = true;
     })();
   }, []);
 
+  // 2. PERSIST every change (only after hydration completes).
   useEffect(() => {
-    if (hydrated && selected) {
+    if (!hydratedRef.current) return;
+    if (selected) {
       void storage.setItem(SELECTED_KEY, JSON.stringify(selected));
-    }
-    if (hydrated && !selected) {
+    } else {
       void storage.removeItem(SELECTED_KEY);
     }
-  }, [selected, hydrated]);
+  }, [selected]);
 
   const setSelected = useCallback((addr: Address | null) => {
     setSelectedState(addr);
   }, []);
 
+  // 3. REFRESH: only ever updates fields; NEVER wipes a persisted selection just because
+  //    the API returned empty (transient failure / server hasn't propagated yet).
+  //    Uses functional setState so it does not depend on `selected` — avoids infinite loops.
   const refresh = useCallback(async () => {
     if (!user) {
       setAddresses([]);
@@ -64,33 +69,33 @@ export function AddressProvider({ children }: { children: React.ReactNode }) {
     try {
       const res = await api<Address[]>("/api/food/addresses");
       setAddresses(res);
-      // if selected still exists in list, refresh its content; else fall back to default
-      const stillThere = selected ? res.find((a) => a.id === selected.id) : null;
-      if (stillThere) {
-        setSelectedState(stillThere);
-      } else if (!selected) {
-        const def = res.find((a) => a.is_default) ?? res[0] ?? null;
-        setSelectedState(def);
-      } else {
-        // previous selection was deleted
-        const def = res.find((a) => a.is_default) ?? res[0] ?? null;
-        setSelectedState(def);
-      }
+      if (res.length === 0) return; // don't touch selection
+      setSelectedState((prev) => {
+        if (prev) {
+          const found = res.find((a) => a.id === prev.id);
+          // Keep the freshest version; if it was deleted server-side, fall back to default/first.
+          return found ?? (res.find((a) => a.is_default) ?? res[0]);
+        }
+        return res.find((a) => a.is_default) ?? res[0];
+      });
     } catch {
-      setAddresses([]);
+      // network / server error: don't wipe local selection
     } finally {
       setLoading(false);
     }
-  }, [user, selected]);
+  }, [user]);
 
+  // 4. On login change: fetch addresses. On logout: clear.
   useEffect(() => {
-    if (user) void refresh();
-    else {
+    if (!user) {
       setAddresses([]);
       setSelectedState(null);
+      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
+    // small delay to let hydration flush first (harmless if already done)
+    const t = setTimeout(() => { void refresh(); }, 50);
+    return () => clearTimeout(t);
+  }, [user?.id, refresh]);
 
   const value = useMemo<Ctx>(() => ({ selected, addresses, loading, setSelected, refresh }), [selected, addresses, loading, setSelected, refresh]);
 
