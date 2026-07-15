@@ -118,7 +118,7 @@ export default function CheckoutScreen() {
         <Card style={{ padding: spacing.md, gap: spacing.sm }}>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
             <Text style={[typography.subtitle, { color: colors.text }]}>Delivery Address</Text>
-            <Pressable onPress={() => router.push("/(customer)/addresses")} testID="add-address-btn">
+            <Pressable onPress={() => router.push("/(customer)/addresses")} testID="manage-address-btn">
               <Text style={{ ...typography.body, color: colors.primary, fontWeight: "700" }}>{addresses.length > 0 ? "Manage" : "+ Add"}</Text>
             </Pressable>
           </View>
