@@ -1,0 +1,230 @@
+{
+  "theme": "Premium Modern Food Delivery Mobile App",
+  "brand": "Shippzu",
+  "tagline": "Everything You Need",
+  "colors": {
+    "light": {
+      "primary": "#FF5A1F",
+      "primary_light": "#FFE8E0",
+      "primary_dark": "#CC4819",
+      "background": "#FFFFFF",
+      "surface": "#F8F9FA",
+      "surface_elevated": "#FFFFFF",
+      "text": "#1A1A1A",
+      "text_secondary": "#6B7280",
+      "text_tertiary": "#9CA3AF",
+      "border": "#E5E7EB",
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "error": "#EF4444",
+      "shimmer_base": "#E5E7EB",
+      "shimmer_highlight": "#F3F4F6",
+      "overlay": "rgba(0, 0, 0, 0.4)"
+    },
+    "dark": {
+      "primary": "#FF5A1F",
+      "primary_light": "#FF8A5C",
+      "primary_dark": "#CC4819",
+      "background": "#0F172A",
+      "surface": "#1E293B",
+      "surface_elevated": "#334155",
+      "text": "#F8F9FA",
+      "text_secondary": "#9CA3AF",
+      "text_tertiary": "#6B7280",
+      "border": "#334155",
+      "success": "#34D399",
+      "warning": "#FBBF24",
+      "error": "#F87171",
+      "shimmer_base": "#1E293B",
+      "shimmer_highlight": "#334155",
+      "overlay": "rgba(0, 0, 0, 0.6)"
+    }
+  },
+  "typography": {
+    "font_family": "Plus Jakarta Sans, sans-serif",
+    "font_family_secondary": "Manrope, sans-serif",
+    "scales": {
+      "h1": { "font_size": 32, "line_height": 40, "font_weight": "800", "letter_spacing": -1 },
+      "h2": { "font_size": 28, "line_height": 36, "font_weight": "800", "letter_spacing": -0.5 },
+      "h3": { "font_size": 24, "line_height": 32, "font_weight": "700", "letter_spacing": -0.5 },
+      "h4": { "font_size": 20, "line_height": 28, "font_weight": "700", "letter_spacing": -0.2 },
+      "subtitle": { "font_size": 18, "line_height": 26, "font_weight": "600" },
+      "body_large": { "font_size": 16, "line_height": 24, "font_weight": "500" },
+      "body_regular": { "font_size": 14, "line_height": 20, "font_weight": "500" },
+      "body_small": { "font_size": 12, "line_height": 16, "font_weight": "500" },
+      "caption": { "font_size": 10, "line_height": 14, "font_weight": "600", "text_transform": "uppercase", "letter_spacing": 0.5 }
+    }
+  },
+  "visual_enhancers": {
+    "radii": {
+      "none": 0,
+      "sm": 4,
+      "md": 8,
+      "lg": 16,
+      "xl": 24,
+      "2xl": 32,
+      "full": 9999
+    },
+    "shadows": {
+      "light": {
+        "sm": "0 2px 4px rgba(0,0,0,0.05)",
+        "md": "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)",
+        "lg": "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)",
+        "glass": "0 8px 32px 0 rgba(31, 38, 135, 0.07)"
+      },
+      "dark": {
+        "sm": "0 2px 4px rgba(0,0,0,0.2)",
+        "md": "0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -1px rgba(0,0,0,0.2)",
+        "lg": "0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -2px rgba(0,0,0,0.2)",
+        "glass": "0 8px 32px 0 rgba(0, 0, 0, 0.3)"
+      }
+    },
+    "spacing": {
+      "xs": 4,
+      "sm": 8,
+      "md": 16,
+      "lg": 24,
+      "xl": 32,
+      "2xl": 48
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": {
+        "background_color": "#FF5A1F",
+        "text_color": "#FFFFFF",
+        "border_radius": 16,
+        "padding_vertical": 16,
+        "padding_horizontal": 24,
+        "font_weight": "700"
+      },
+      "secondary": {
+        "background_color": "transparent",
+        "text_color": "#FF5A1F",
+        "border_color": "#FF5A1F",
+        "border_width": 2,
+        "border_radius": 16,
+        "padding_vertical": 14,
+        "padding_horizontal": 24,
+        "font_weight": "700"
+      },
+      "ghost": {
+        "background_color": "rgba(255, 90, 31, 0.1)",
+        "text_color": "#FF5A1F",
+        "border_radius": 16,
+        "padding_vertical": 12,
+        "padding_horizontal": 20,
+        "font_weight": "700"
+      }
+    },
+    "cards": {
+      "restaurant": {
+        "border_radius": 24,
+        "background_color": "surface_elevated",
+        "overflow": "hidden",
+        "shadow": "lg"
+      },
+      "food_item": {
+        "border_radius": 16,
+        "background_color": "surface",
+        "padding": 12,
+        "shadow": "sm"
+      }
+    },
+    "chips": {
+      "category": {
+        "border_radius": 24,
+        "background_color": "surface",
+        "padding_vertical": 8,
+        "padding_horizontal": 16,
+        "border_color": "border",
+        "border_width": 1
+      },
+      "active": {
+        "background_color": "primary",
+        "text_color": "#FFFFFF",
+        "border_color": "primary"
+      }
+    },
+    "inputs": {
+      "text": {
+        "border_radius": 16,
+        "background_color": "surface",
+        "border_color": "border",
+        "border_width": 1,
+        "padding": 16,
+        "font_size": 16
+      },
+      "search": {
+        "border_radius": 24,
+        "background_color": "surface",
+        "padding_horizontal": 20,
+        "padding_vertical": 14,
+        "icon_color": "text_secondary"
+      }
+    },
+    "bottom_sheets": {
+      "border_top_radius": 32,
+      "background_color": "background",
+      "shadow": "lg",
+      "handle_color": "border"
+    }
+  },
+  "screens": {
+    "splash": "Central Shippzu logo with subtle pulse/scale animation. Background: primary or pristine white.",
+    "onboarding": "3 slides with high-quality illustrations or imagery. Smooth swipe with dot indicators. 'Skip' button top right, 'Next/Get Started' primary button at bottom.",
+    "auth": "Clean inputs with generous padding. Social login options (Google, Apple) with distinct icons. OTP bottom sheet for phone login.",
+    "location": "Map view taking up 60% of screen. Draggable bottom sheet with 'Use Current Location' button and search input. Smooth map pin animation.",
+    "home": "Sticky header with user location and profile avatar. Large rounded search bar with voice icon. Horizontal scrolling category chips. Featured carousel with full-bleed images and gradient overlays. Vertical list for popular restaurants.",
+    "restaurant_details": "Collapsing parallax header with hero image. Floating back button. Info card overlapping header with rating, time, fee. Horizontal scrolling menu categories (sticky). Food item list with veg/non-veg indicator and 'Add' button. Bottom sheet for variants.",
+    "cart": "List of added items with quantity controls (+/-). Coupon input field. Detailed price breakdown. Sticky bottom CTA 'Proceed to Pay' with grand total.",
+    "checkout": "Saved addresses horizontal scroll. Payment methods list with icons (UPI, Cards, COD). Primary 'Place Order' CTA.",
+    "order_tracking": "Lottie animation for delivery partner. Timeline vertical stepper (placed -> preparing -> on the way -> delivered). Live map view. ETA prominent display.",
+    "profile": "User info header. List menu items with left icon, right chevron (Orders, Favourites, Addresses, Settings, Theme Toggle, Logout)."
+  },
+  "image_urls": {
+    "categories": [
+      { "name": "Pizza", "url": "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwzfHxwaXp6YXxlbnwwfHx8fDE3ODQwOTA4Nzh8MA&ixlib=rb-4.1.0&q=85" },
+      { "name": "Burger", "url": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwxfHxidXJnZXJ8ZW58MHx8fHwxNzg0MDkwODc4fDA&ixlib=rb-4.1.0&q=85" },
+      { "name": "Biryani", "url": "https://images.pexels.com/photos/9738983/pexels-photo-9738983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
+      { "name": "Chinese", "url": "https://images.pexels.com/photos/21482824/pexels-photo-21482824.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
+      { "name": "Desserts", "url": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwyfHxkZXNzZXJ0fGVufDB8fHx8MTc4NDA5MDg3OHww&ixlib=rb-4.1.0&q=85" },
+      { "name": "Healthy", "url": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzZ8MHwxfHNlYXJjaHwyfHxoZWFsdGh5JTIwZm9vZCUyMHNhbGFkfGVufDB8fHx8MTc4NDA5MDg3OXww&ixlib=rb-4.1.0&q=85" },
+      { "name": "Indian", "url": "https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
+      { "name": "South Indian", "url": "https://images.unsplash.com/photo-1644289450169-bc58aa16bacb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzF8MHwxfHNlYXJjaHwyfHxzb3V0aCUyMGluZGlhbiUyMGRvc2F8ZW58MHx8fHwxNzg0MDkwODc4fDA&ixlib=rb-4.1.0&q=85" },
+      { "name": "Beverages", "url": "https://images.unsplash.com/photo-1625865019845-7b2c89b8a8a9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxiZXZlcmFnZSUyMGRyaW5rfGVufDB8fHx8MTc4NDA5MDg3OXww&ixlib=rb-4.1.0&q=85" },
+      { "name": "Sushi", "url": "https://images.pexels.com/photos/11470545/pexels-photo-11470545.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" }
+    ],
+    "restaurants": [
+      { "name": "Pizza Express", "url": "https://images.unsplash.com/photo-1783240819607-59efc3834326?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHwyfHxyZXN0YXVyYW50JTIwZmFjYWRlJTIwZXh0ZXJpb3J8ZW58MHx8fHwxNzg0MDkwODc4fDA&ixlib=rb-4.1.0&q=85" },
+      { "name": "The Urban Pub", "url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwxfHxyZXN0YXVyYW50JTIwaW50ZXJpb3J8ZW58MHx8fHwxNzg0MDkwODc4fDA&ixlib=rb-4.1.0&q=85" },
+      { "name": "Greenhouse Diner", "url": "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHw0fHxyZXN0YXVyYW50JTIwaW50ZXJpb3J8ZW58MHx8fHwxNzg0MDkwODc4fDA&ixlib=rb-4.1.0&q=85" },
+      { "name": "Classic Burger Joint", "url": "https://images.unsplash.com/photo-1777880652279-35cd5492514e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzV8MHwxfHNlYXJjaHw0fHxyZXN0YXVyYW50JTIwZmFjYWRlJTIwZXh0ZXJpb3J8ZW58MHx8fHwxNzg0MDkwODc4fDA&ixlib=rb-4.1.0&q=85" }
+    ],
+    "premium_dishes": [
+      { "name": "Gourmet Plating", "url": "https://images.unsplash.com/photo-1600663791817-d74f5196ba29?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwxfHxwcmVtaXVtJTIwZm9vZCUyMGRpc2h8ZW58MHx8fHwxNzg0MDkwODc4fDA&ixlib=rb-4.1.0&q=85" },
+      { "name": "Elegant Dish", "url": "https://images.unsplash.com/photo-1621494268492-d01b98eba7e4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxNzV8MHwxfHNlYXJjaHwyfHxwcmVtaXVtJTIwZm9vZCUyMGRpc2h8ZW58MHx8fHwxNzg0MDkwODc4fDA&ixlib=rb-4.1.0&q=85" }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Use Lucide-React-Native for consistent, modern iconography.",
+    "Implement Reanimated or React Native Animated for smooth transitions, parallax effects, and bottom sheets.",
+    "Use proper safe area views to avoid notches on modern iOS/Android devices.",
+    "Ensure the bottom navigation bar has a glassmorphism effect using blur views where applicable, but ensure text/icons contrast is accessible.",
+    "Build a context or Zustand/Redux store to handle Dark/Light mode theme switching dynamically.",
+    "For typography, install `@expo-google-fonts/plus-jakarta-sans` or equivalent and load it asynchronously at splash screen.",
+    "Apply `data-testid` to all clickable buttons, inputs, and interactive lists for E2E testing.",
+    "Use skeleton loaders (Shimmer effects) for images and lists while data/images are fetching.",
+    "Images should have a subtle dark overlay (`rgba(0,0,0,0.3)`) when text is layered over them (like restaurant hero images)."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic outputs. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Create depth through layered design elements with z-index hierarchy and drop shadows.",
+    "Do not make generic centered layouts. Use asymmetrical or well-structured grids.",
+    "Every interaction needs micro-animations (press in/out scale effects).",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Never use placeholder URLs (like via.placeholder.com). Use the provided image URLs.",
+    "Never use transparent backgrounds on elements that have scrolling text beneath them without a blur.",
+    "Always add data-testid to interactive elements."
+  ]
+}
