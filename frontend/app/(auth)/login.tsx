@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/src/theme/ThemeContext";
 import { Input } from "@/src/components/ui/Input";
 import { Button } from "@/src/components/ui/Button";
+import { Logo } from "@/src/components/ui/Logo";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useToast } from "@/src/components/ui/Toast";
 import { spacing, typography, radii } from "@/src/theme/tokens";
@@ -14,7 +15,7 @@ import { spacing, typography, radii } from "@/src/theme/tokens";
 export default function Login() {
   const { colors } = useTheme();
   const router = useRouter();
-  const { signIn, googleSignIn } = useAuth();
+  const { signIn } = useAuth();
   const toast = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -38,23 +39,9 @@ export default function Login() {
     }
   };
 
-  const demoGoogle = async () => {
-    // Emergent-managed Google auth — Phase 1 uses a stubbed identity that hits
-    // /api/auth/google. On real device build, replace with @react-native-google-signin.
-    setLoading(true);
-    try {
-      await googleSignIn({
-        email: "google.demo@shippzu.com",
-        name: "Google Demo User",
-        google_id: "demo-google-uid",
-      });
-      toast.show("Signed in with Google", "success");
-      router.replace("/(customer)/(tabs)");
-    } catch (e: any) {
-      toast.show(e?.message || "Google sign-in failed", "error");
-    } finally {
-      setLoading(false);
-    }
+  const googleLogin = () => {
+    // Native Google Sign-In activates on APK/AAB build with @react-native-google-signin
+    toast.show("Google Sign-In activates on the device build", "info");
   };
 
   return (
@@ -62,9 +49,7 @@ export default function Login() {
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={{ padding: spacing.lg, gap: spacing.md }} keyboardShouldPersistTaps="handled">
           <View style={styles.logoRow}>
-            <View style={[styles.logoBox, { backgroundColor: colors.primary }]}>
-              <Ionicons name="fast-food" size={36} color="#fff" />
-            </View>
+            <Logo variant="stacked" size={80} showTagline />
           </View>
           <Text style={[typography.h1, { color: colors.text, textAlign: "center", marginTop: spacing.md }]}>Welcome back</Text>
           <Text style={[typography.bodyLarge, { color: colors.textSecondary, textAlign: "center", marginBottom: spacing.lg }]}>
@@ -109,7 +94,7 @@ export default function Login() {
           </View>
 
           <Pressable
-            onPress={demoGoogle}
+            onPress={googleLogin}
             style={[styles.socialBtn, { borderColor: colors.border, backgroundColor: colors.surface }]}
             testID="google-signin-btn"
           >
@@ -131,12 +116,6 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   logoRow: { alignItems: "center", marginTop: spacing.lg },
-  logoBox: {
-    width: 72, height: 72, borderRadius: 20,
-    alignItems: "center", justifyContent: "center",
-    shadowColor: "#FF5A1F", shadowOpacity: 0.3, shadowRadius: 16, shadowOffset: { width: 0, height: 8 },
-    elevation: 8,
-  },
   dividerRow: { flexDirection: "row", alignItems: "center", gap: spacing.md, marginVertical: spacing.md },
   divider: { flex: 1, height: 1 },
   socialBtn: {

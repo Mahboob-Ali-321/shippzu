@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, Modal, TextInput } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/src/theme/ThemeContext";
 import { api } from "@/src/api/client";
+import { useAddress } from "@/src/contexts/AddressContext";
 import { Card } from "@/src/components/ui/Card";
 import { Button } from "@/src/components/ui/Button";
 import { Input } from "@/src/components/ui/Input";
@@ -18,16 +19,12 @@ export default function AddressesScreen() {
   const { colors } = useTheme();
   const router = useRouter();
   const toast = useToast();
-  const [addresses, setAddresses] = useState<Address[]>([]);
+  const { addresses, selected, setSelected, refresh } = useAddress();
   const [modalVisible, setModalVisible] = useState(false);
   const [form, setForm] = useState({ label: "Home", line1: "", line2: "", city: "", state: "", pincode: "", is_default: false });
   const [saving, setSaving] = useState(false);
 
-  const load = useCallback(async () => {
-    try { const res = await api<Address[]>("/api/food/addresses"); setAddresses(res); } catch { /* ignore */ }
-  }, []);
-
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => { void refresh(); }, [refresh]);
 
   const save = async () => {
     if (!form.line1 || !form.city || !form.state || !form.pincode) {
@@ -36,11 +33,12 @@ export default function AddressesScreen() {
     }
     setSaving(true);
     try {
-      await api("/api/food/addresses", { method: "POST", body: form });
+      const created = await api<Address>("/api/food/addresses", { method: "POST", body: form });
       toast.show("Address saved", "success");
       setModalVisible(false);
       setForm({ label: "Home", line1: "", line2: "", city: "", state: "", pincode: "", is_default: false });
-      void load();
+      setSelected(created);
+      await refresh();
     } catch (e: any) {
       toast.show(e?.message || "Failed to save", "error");
     } finally {
@@ -49,8 +47,18 @@ export default function AddressesScreen() {
   };
 
   const removeAddress = async (id: string) => {
-    try { await api(`/api/food/addresses/${id}`, { method: "DELETE" }); toast.show("Address deleted", "info"); void load(); }
-    catch (e: any) { toast.show(e?.message || "Failed", "error"); }
+    try {
+      await api(`/api/food/addresses/${id}`, { method: "DELETE" });
+      toast.show("Address deleted", "info");
+      if (selected?.id === id) setSelected(null);
+      await refresh();
+    } catch (e: any) { toast.show(e?.message || "Failed", "error"); }
+  };
+
+  const chooseAddress = (a: Address) => {
+    setSelected(a);
+    toast.show(`Deliver to ${a.label}`, "success");
+    router.back();
   };
 
   return (
@@ -69,18 +77,26 @@ export default function AddressesScreen() {
             <Text style={[typography.body, { color: colors.textSecondary, textAlign: "center" }]}>Add your delivery address to place orders faster</Text>
           </View>
         ) : (
-          addresses.map((a) => (
-            <Card key={a.id} style={{ padding: spacing.md, gap: 6 }}>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                <Ionicons name={a.label === "Home" ? "home" : a.label === "Work" ? "briefcase" : "location"} size={16} color={colors.primary} />
-                <Text style={[typography.subtitle, { color: colors.text }]}>{a.label}</Text>
-                {a.is_default && <Text style={{ backgroundColor: colors.success + "20", color: colors.success, paddingHorizontal: 6, paddingVertical: 2, fontSize: 10, borderRadius: radii.sm, fontWeight: "700" }}>DEFAULT</Text>}
-                <View style={{ flex: 1 }} />
-                <Pressable onPress={() => removeAddress(a.id)} testID={`delete-address-${a.id}`}><Ionicons name="trash-outline" size={18} color={colors.error} /></Pressable>
-              </View>
-              <Text style={[typography.body, { color: colors.textSecondary }]}>{a.line1}{a.line2 ? `, ${a.line2}` : ""}, {a.city}, {a.state} - {a.pincode}</Text>
-            </Card>
-          ))
+          addresses.map((a) => {
+            const isActive = selected?.id === a.id;
+            return (
+              <Pressable key={a.id} onPress={() => chooseAddress(a)} testID={`select-address-${a.id}`}>
+                <Card style={{ padding: spacing.md, gap: 6, borderWidth: isActive ? 2 : 0, borderColor: isActive ? colors.primary : "transparent" }}>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                    <Ionicons name={a.label === "Home" ? "home" : a.label === "Work" ? "briefcase" : "location"} size={16} color={colors.primary} />
+                    <Text style={[typography.subtitle, { color: colors.text }]}>{a.label}</Text>
+                    {a.is_default ? <Text style={{ backgroundColor: colors.success + "20", color: colors.success, paddingHorizontal: 6, paddingVertical: 2, fontSize: 10, borderRadius: radii.sm, fontWeight: "700" }}>DEFAULT</Text> : null}
+                    {isActive ? <Text style={{ backgroundColor: colors.primary + "20", color: colors.primary, paddingHorizontal: 6, paddingVertical: 2, fontSize: 10, borderRadius: radii.sm, fontWeight: "700" }}>DELIVERING HERE</Text> : null}
+                    <View style={{ flex: 1 }} />
+                    <Pressable onPress={() => removeAddress(a.id)} testID={`delete-address-${a.id}`} hitSlop={10}>
+                      <Ionicons name="trash-outline" size={18} color={colors.error} />
+                    </Pressable>
+                  </View>
+                  <Text style={[typography.body, { color: colors.textSecondary }]}>{a.line1}{a.line2 ? `, ${a.line2}` : ""}, {a.city}, {a.state} - {a.pincode}</Text>
+                </Card>
+              </Pressable>
+            );
+          })
         )}
       </ScrollView>
 
@@ -124,7 +140,7 @@ export default function AddressesScreen() {
                 testID="addr-default-toggle"
               >
                 <View style={{ width: 20, height: 20, borderRadius: 4, borderWidth: 2, borderColor: form.is_default ? colors.primary : colors.border, backgroundColor: form.is_default ? colors.primary : "transparent", alignItems: "center", justifyContent: "center" }}>
-                  {form.is_default && <Ionicons name="checkmark" size={14} color="#fff" />}
+                  {form.is_default ? <Ionicons name="checkmark" size={14} color="#fff" /> : null}
                 </View>
                 <Text style={{ color: colors.text }}>Make this my default address</Text>
               </Pressable>

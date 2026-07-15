@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Easing } from "react-native";
 import { useRouter } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/src/theme/ThemeContext";
 import { useAuth } from "@/src/contexts/AuthContext";
+import { Logo } from "@/src/components/ui/Logo";
 import { spacing, typography } from "@/src/theme/tokens";
 import { storage } from "@/src/utils/storage";
 
@@ -34,33 +34,20 @@ export default function Index() {
       } else {
         router.replace("/(customer)/(tabs)");
       }
-    }, 1500);
+    }, 1600);
     return () => clearTimeout(t);
   }, [loading, user, router]);
 
   return (
-    <View style={[styles.root, { backgroundColor: colors.primary }]} testID="splash-screen">
+    <View style={styles.root} testID="splash-screen">
       <Animated.View style={{ transform: [{ scale }], opacity, alignItems: "center" }}>
-        <View style={styles.logoBox}>
-          <Ionicons name="fast-food" size={70} color={colors.primary} />
-        </View>
-        <Text style={styles.brand}>Shippzu</Text>
-        <Text style={styles.tagline}>Everything You Need</Text>
+        <Logo variant="stacked" size={100} showTagline />
       </Animated.View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, alignItems: "center", justifyContent: "center" },
-  logoBox: {
-    width: 120, height: 120, borderRadius: 32,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center", justifyContent: "center",
-    marginBottom: spacing.lg,
-    shadowColor: "#000", shadowOpacity: 0.2, shadowRadius: 20, shadowOffset: { width: 0, height: 12 },
-    elevation: 12,
-  },
-  brand: { ...typography.h1, color: "#FFFFFF", fontSize: 44, letterSpacing: -1.5 },
-  tagline: { ...typography.subtitle, color: "#FFFFFF", opacity: 0.9, marginTop: 4, letterSpacing: 2, textTransform: "uppercase", fontSize: 12 },
+  root: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#FFFFFF" },
 });
+

@@ -176,7 +176,12 @@ export default function RestaurantDetails() {
             <Text style={[typography.h4, { color: colors.text, marginBottom: spacing.md }]}>{section.category}</Text>
             <View style={{ gap: spacing.md }}>
               {section.items.map((food) => (
-                <Card key={food.id} style={{ flexDirection: "row", padding: 12, gap: 12 }}>
+                <Pressable
+                  key={food.id}
+                  onPress={() => router.push({ pathname: "/(customer)/food/[id]", params: { id: food.id } })}
+                  testID={`food-card-${food.id}`}
+                >
+                  <Card style={{ flexDirection: "row", padding: 12, gap: 12 }}>
                   <View style={{ flex: 1, gap: 4 }}>
                     <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
                       <VegBadge veg={food.veg} />
@@ -194,7 +199,7 @@ export default function RestaurantDetails() {
                   <View style={{ alignItems: "center", gap: 8 }}>
                     <Image source={{ uri: food.image }} style={{ width: 100, height: 100, borderRadius: radii.lg }} />
                     <Pressable
-                      onPress={() => handleAdd(food)}
+                      onPress={(e) => { e.stopPropagation?.(); handleAdd(food); }}
                       style={[styles.addBtn, { borderColor: colors.primary, backgroundColor: colors.background }]}
                       testID={`add-food-${food.id}`}
                     >
@@ -205,6 +210,7 @@ export default function RestaurantDetails() {
                     </Pressable>
                   </View>
                 </Card>
+                </Pressable>
               ))}
             </View>
           </View>

@@ -65,7 +65,7 @@ export default function FavouritesScreen() {
               onPress={() =>
                 tab === "restaurants"
                   ? router.push({ pathname: "/(customer)/restaurant/[id]", params: { id: item.id } })
-                  : router.push({ pathname: "/(customer)/restaurant/[id]", params: { id: item.restaurant_id } })
+                  : router.push({ pathname: "/(customer)/food/[id]", params: { id: item.id } })
               }
               testID={`fav-item-${item.id}`}
             >

@@ -5,6 +5,7 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/src/theme/ThemeContext";
 import { Card } from "@/src/components/ui/Card";
+import { Logo } from "@/src/components/ui/Logo";
 import { spacing, typography } from "@/src/theme/tokens";
 
 export default function SettingsScreen() {
@@ -43,10 +44,10 @@ export default function SettingsScreen() {
           </View>
         </Card>
 
-        <Card style={{ padding: spacing.md, gap: 4 }}>
-          <Text style={[typography.subtitle, { color: colors.text }]}>About Shippzu</Text>
-          <Text style={[typography.body, { color: colors.textSecondary }]}>Version 1.0.0 · Phase 1 (Food Delivery)</Text>
-          <Text style={[typography.bodySmall, { color: colors.textTertiary, marginTop: 4 }]}>
+        <Card style={{ padding: spacing.lg, gap: 8, alignItems: "center" }}>
+          <Logo variant="stacked" size={64} showTagline />
+          <Text style={[typography.body, { color: colors.textSecondary, marginTop: 8 }]}>Version 1.0.0 · Phase 1 (Food Delivery)</Text>
+          <Text style={[typography.bodySmall, { color: colors.textTertiary, textAlign: "center" }]}>
             Grocery, Pharmacy, Parcel Delivery and 7 more modules launching soon.
           </Text>
         </Card>

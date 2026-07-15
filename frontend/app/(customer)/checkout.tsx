@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { useTheme } from "@/src/theme/ThemeContext";
 import { useCart } from "@/src/contexts/CartContext";
+import { useAddress } from "@/src/contexts/AddressContext";
 import { api } from "@/src/api/client";
 import { Card } from "@/src/components/ui/Card";
 import { Button } from "@/src/components/ui/Button";
@@ -22,32 +23,36 @@ const PAYMENT_METHODS = [
 export default function CheckoutScreen() {
   const { colors } = useTheme();
   const { cart, clear } = useCart();
+  const { addresses, selected, setSelected, refresh } = useAddress();
   const router = useRouter();
   const toast = useToast();
   const { coupon } = useLocalSearchParams<{ coupon?: string }>();
 
-  const [addresses, setAddresses] = useState<Address[]>([]);
-  const [addressId, setAddressId] = useState<string | null>(null);
+  const [addressId, setAddressId] = useState<string | null>(selected?.id ?? null);
   const [payment, setPayment] = useState<"cod" | "razorpay">("cod");
   const [placing, setPlacing] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
-    try {
-      const res = await api<Address[]>("/api/food/addresses");
-      setAddresses(res);
-      const def = res.find((a) => a.is_default) ?? res[0];
-      if (def) setAddressId(def.id);
-    } catch {
-      // ignore
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    await refresh();
+    setLoading(false);
+  }, [refresh]);
 
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    // sync context selection into local state
+    if (selected && !addressId) setAddressId(selected.id);
+    if (!addressId && addresses.length > 0) {
+      const def = addresses.find((a) => a.is_default) ?? addresses[0];
+      if (def) {
+        setAddressId(def.id);
+        setSelected(def);
+      }
+    }
+  }, [addresses, selected, addressId, setSelected]);
 
   const placeOrder = async () => {
     if (!cart.restaurant_id) return;
@@ -134,7 +139,7 @@ export default function CheckoutScreen() {
               return (
                 <Pressable
                   key={a.id}
-                  onPress={() => setAddressId(a.id)}
+                  onPress={() => { setAddressId(a.id); setSelected(a); }}
                   style={{ flexDirection: "row", alignItems: "flex-start", gap: 12, paddingVertical: 8 }}
                   testID={`address-${a.id}`}
                 >
@@ -182,10 +187,6 @@ export default function CheckoutScreen() {
         </Card>
 
         {/* Note */}
-        <View style={{ padding: 12, backgroundColor: colors.warning + "10", borderRadius: radii.md, borderLeftWidth: 4, borderLeftColor: colors.warning }}>
-          <Text style={[typography.bodySmall, { color: colors.warning, fontWeight: "700" }]}>⚡ Razorpay is in DEMO mode</Text>
-          <Text style={[typography.bodySmall, { color: colors.textSecondary, marginTop: 2 }]}>Add real RAZORPAY_KEY_ID/SECRET in backend .env to enable production payments.</Text>
-        </View>
       </ScrollView>
 
       <View style={[styles.footer, { backgroundColor: colors.surfaceElevated, borderTopColor: colors.border }]}>

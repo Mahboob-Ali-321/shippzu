@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/src/theme/ThemeContext";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { Card } from "@/src/components/ui/Card";
+import { Logo } from "@/src/components/ui/Logo";
 import { spacing, typography, radii } from "@/src/theme/tokens";
 
 export default function ProfileScreen() {
@@ -25,8 +26,9 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.lg }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.lg, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
           <Text style={[typography.h2, { color: colors.text }]}>Profile</Text>
+          <Logo variant="icon" size={36} />
         </View>
 
         <Card style={{ marginHorizontal: spacing.lg, padding: spacing.md, flexDirection: "row", alignItems: "center", gap: spacing.md }}>
@@ -81,7 +83,7 @@ export default function ProfileScreen() {
         </View>
 
         <Text style={{ textAlign: "center", color: colors.textTertiary, marginTop: spacing.xl, ...typography.caption }}>
-          Shippzu v1.0.0 · Everything You Need
+          Shippzu v1.0.0 · EVERYTHING YOU NEED
         </Text>
       </ScrollView>
     </SafeAreaView>

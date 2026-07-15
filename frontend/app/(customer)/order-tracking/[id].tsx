@@ -7,7 +7,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/src/theme/ThemeContext";
 import { api } from "@/src/api/client";
 import { Card } from "@/src/components/ui/Card";
-import { Button } from "@/src/components/ui/Button";
 import { useToast } from "@/src/components/ui/Toast";
 import { spacing, typography, radii } from "@/src/theme/tokens";
 
@@ -68,17 +67,6 @@ export default function OrderTrackingScreen() {
     const t = setInterval(load, 10000);
     return () => clearInterval(t);
   }, [load]);
-
-  const advance = async () => {
-    if (!id) return;
-    try {
-      const res = await api<Order>(`/api/food/orders/${id}/advance`, { method: "POST" });
-      setOrder(res);
-      toast.show("Order status updated", "success");
-    } catch (e: any) {
-      toast.show(e?.message || "Failed", "error");
-    }
-  };
 
   if (!order) {
     return (
@@ -144,9 +132,8 @@ export default function OrderTrackingScreen() {
           })}
         </Card>
 
-        {order.status !== "delivered" && order.status !== "cancelled" && (
-          <Button title="Simulate: Advance status (dev)" variant="secondary" onPress={advance} testID="advance-status-btn" />
-        )}
+        {order.status !== "delivered" && order.status !== "cancelled" && order.status !== "placed" ? null : null}
+
 
         {/* Delivery address */}
         <Card style={{ padding: spacing.md, gap: 4 }}>

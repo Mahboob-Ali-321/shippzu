@@ -18,9 +18,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "@/src/theme/ThemeContext";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { useCart } from "@/src/contexts/CartContext";
+import { useAddress } from "@/src/contexts/AddressContext";
 import { api } from "@/src/api/client";
 import { Card } from "@/src/components/ui/Card";
 import { Skeleton } from "@/src/components/ui/Skeleton";
+import { Logo } from "@/src/components/ui/Logo";
 import { MODULES } from "@/src/modules/registry";
 import { useToast } from "@/src/components/ui/Toast";
 import { spacing, typography, radii } from "@/src/theme/tokens";
@@ -60,6 +62,7 @@ export default function HomeScreen() {
   const { colors, isDark } = useTheme();
   const { user } = useAuth();
   const { itemCount, cart } = useCart();
+  const { selected: selectedAddress } = useAddress();
   const router = useRouter();
   const toast = useToast();
   const [data, setData] = useState<Home | null>(null);
@@ -91,14 +94,21 @@ export default function HomeScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }} edges={["top"]}>
       {/* Sticky Header */}
       <View style={[styles.header, { backgroundColor: colors.background, borderBottomColor: colors.border }]}>
-        <View style={{ flex: 1 }}>
+        <Logo variant="icon" size={38} />
+        <Pressable
+          style={{ flex: 1, marginLeft: spacing.sm }}
+          onPress={() => router.push("/(customer)/addresses")}
+          testID="home-location-btn"
+        >
           <Text style={[typography.bodySmall, { color: colors.textSecondary }]}>Deliver to</Text>
-          <Pressable style={{ flexDirection: "row", alignItems: "center", gap: 4 }} onPress={() => router.push("/(customer)/addresses")} testID="home-location-btn">
-            <Ionicons name="location" size={16} color={colors.primary} />
-            <Text style={[typography.subtitle, { color: colors.text }]} numberOfLines={1}>Current Location</Text>
-            <Ionicons name="chevron-down" size={16} color={colors.text} />
-          </Pressable>
-        </View>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+            <Ionicons name="location" size={14} color={colors.primary} />
+            <Text style={[typography.subtitle, { color: colors.text, flex: 1 }]} numberOfLines={1}>
+              {selectedAddress ? `${selectedAddress.label} · ${selectedAddress.line1}` : "Add delivery address"}
+            </Text>
+            <Ionicons name="chevron-down" size={14} color={colors.text} />
+          </View>
+        </Pressable>
         <Pressable style={[styles.headerIcon, { backgroundColor: colors.surface }]} onPress={() => router.push("/(customer)/notifications")} testID="home-notifications-btn">
           <Ionicons name="notifications-outline" size={22} color={colors.text} />
         </Pressable>

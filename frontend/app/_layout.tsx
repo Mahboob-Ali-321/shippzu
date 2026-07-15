@@ -10,6 +10,7 @@ import { useIconFonts } from "@/src/hooks/use-icon-fonts";
 import { ThemeProvider, useTheme } from "@/src/theme/ThemeContext";
 import { AuthProvider } from "@/src/contexts/AuthContext";
 import { CartProvider } from "@/src/contexts/CartContext";
+import { AddressProvider } from "@/src/contexts/AddressContext";
 import { ToastProvider } from "@/src/components/ui/Toast";
 
 LogBox.ignoreAllLogs(true);
@@ -43,11 +44,13 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <ThemeProvider>
           <AuthProvider>
-            <CartProvider>
-              <ToastProvider>
-                <InnerLayout />
-              </ToastProvider>
-            </CartProvider>
+            <AddressProvider>
+              <CartProvider>
+                <ToastProvider>
+                  <InnerLayout />
+                </ToastProvider>
+              </CartProvider>
+            </AddressProvider>
           </AuthProvider>
         </ThemeProvider>
       </SafeAreaProvider>

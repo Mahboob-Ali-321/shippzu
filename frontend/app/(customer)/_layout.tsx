@@ -8,6 +8,7 @@ export default function CustomerLayout() {
     <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="restaurant/[id]" />
+      <Stack.Screen name="food/[id]" />
       <Stack.Screen name="cart" options={{ presentation: "card" }} />
       <Stack.Screen name="checkout" />
       <Stack.Screen name="order-success" />

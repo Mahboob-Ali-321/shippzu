@@ -9,7 +9,7 @@ export const colors = {
     background: "#FFFFFF",
     surface: "#F8F9FA",
     surfaceElevated: "#FFFFFF",
-    text: "#1A1A1A",
+    text: "#1F1F1F",
     textSecondary: "#6B7280",
     textTertiary: "#9CA3AF",
     border: "#E5E7EB",
